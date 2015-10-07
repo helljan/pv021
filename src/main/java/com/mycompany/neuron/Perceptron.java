@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Perceptron {
     float[] weights;
-    float c = 0.01;
+    float c = 0.01f;
     
     Perceptron(int n) {
         weights = new float[n];
