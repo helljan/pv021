@@ -4,15 +4,14 @@ import java.util.Random;
 
 public class main {
 
-    Perceptron ptron;
-    Trainer[] training = new Trainer[2000];
-    int count = 0;
+    static Perceptron ptron;
+    static Trainer[] training = new Trainer[2000];
     
-    float f(float x) {
+    static float f(float x) {
         return 2 * x + 1;
     }
     
-    void setup() {
+    static void setup() {
         ptron = new Perceptron(3);
         
         Random rand = new Random();
@@ -29,7 +28,16 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        setup();
+        
+        for (int i = 0; i < training.length - 10; i++) {
+            ptron.train(training[i].inputs, training[i].answer);
+        }
+        
+        for (int i = training.length - 10; i < training.length; i++) {
+            int answer = ptron.feedForward(training[i].inputs);
+            System.out.println(answer == training[i].answer);
+        }
     }
     
 }
