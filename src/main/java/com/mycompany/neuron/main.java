@@ -8,7 +8,7 @@ public class main {
     static Trainer[] training = new Trainer[2000];
     
     static float f(float x) {
-        return 2 * x + 1;
+        return 2 * x +  1;
     }
     
     static void setup() {
