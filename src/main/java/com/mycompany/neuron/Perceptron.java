@@ -1,25 +1,35 @@
 package com.mycompany.neuron;
 
+import java.util.List;
 import java.util.Random;
 
 public class Perceptron {
     float[] weights;
     float c = 0.01f;
+    float y = 0;
+    final float lambda = 1;
+    List<Perceptron> inputs;
     
-    Perceptron(int n) {
-        weights = new float[n];
-        Random rand = new Random();
-        for (int i = 0; i < weights.length; i++) {
-            weights[i] = rand.nextFloat() * 2 - 1;
+    Perceptron(List<Perceptron> inputs) {
+        if (inputs == null) {
+            // this is input layer perceptron
+        } else {
+            this.inputs = inputs;
+            weights = new float[inputs.size()];
+            Random rand = new Random();
+            for (int i = 0; i < weights.length; i++) {
+                weights[i] = rand.nextFloat() * 2 - 1;
+            }
         }
     }
     
-    int feedForward(float[] inputs) {
+    float feedForward() {
         float sum = 0;
         for (int i = 0; i < weights.length; i++) {
-            sum += inputs[i] * weights[i];
+            sum += inputs.get(i).y * weights[i];
         }
-        return activate(sum);
+        y = activateLogSig(sum);
+        return y;
     }
     
     int activate(float sum) {
@@ -27,11 +37,15 @@ public class Perceptron {
         else return -1;
     }
     
-    void train(float[] inputs, int desired) {
-        int guess = feedForward(inputs);
+    float activateLogSig(float sum) {
+        return (float) (1 / (1 + Math.exp(- lambda * sum)));
+    }
+    
+    void train(int desired) {
+        float guess = feedForward();
         float error = desired - guess;
         for (int i = 0; i < weights.length; i++) {
-            weights[i] += c * error * inputs[i];
+            weights[i] += c * error * inputs.get(i).y;
         }
     }
 }
