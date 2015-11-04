@@ -35,10 +35,18 @@ public class MultilayerPerceptron {
         }
     }
     
-    List<Perceptron> getAllPerceptrons() {
+    List<Perceptron> getAllPerceptrons(boolean inputLayer) {
         List<Perceptron> result = new ArrayList<>();
-        for (int i = 0; i < network.size(); i++) {
+        for (int i = inputLayer ? 0 : 1; i < network.size(); i++) {
             result.addAll(network.get(i));
+        }
+        return result;
+    }
+    
+    int numWeights() {
+        int result = 0;
+        for (int i = 1; i < network.size(); i++) {
+            result += network.get(i).size() * network.get(i - 1).size();
         }
         return result;
     }
@@ -48,22 +56,51 @@ public class MultilayerPerceptron {
     }
     
     void gradient(List<float[]> inputs, List<float[]> outputs) {
-        List<Perceptron> perceptrons = getAllPerceptrons();
+        List<Perceptron> perceptrons = getAllPerceptrons(false);
         
-        float[] Eji = new float[perceptrons.size()];
+        // Eji = 0
+        List<float[]> Eji = new ArrayList<>();
+        for (int j = 0; j < perceptrons.size(); j++) {
+            int numWeights = perceptrons.get(j).weights.length;
+            Eji.add(new float[numWeights]);
+            for (int i = 0; i < numWeights; i++) {
+                Eji.get(j)[i] = 0;
+
+            }
+        }
         
         for (int k = 0; k < inputs.size(); k++) {
             // 1.
             feedForward(inputs.get(k));
             
             // 2.
+            float[] Ek_yj = backpropagation();
             
             // 3.
+            List<float[]> Ek_wji = new ArrayList<>();
+            for (int j = 0; j < perceptrons.size(); j++) {
+                int numWeights = perceptrons.get(j).weights.length;
+                Ek_wji.add(new float[numWeights]);
+                for (int i = 0; i < numWeights; i++) {
+                    Ek_wji.get(j)[i] = Ek_yj[j] *
+                            perceptrons.get(j).derivActivLogSig() *
+                            perceptrons.get(j).inputs.get(i).y;
+                            
+                }
+            }
             
+            // 4.
+            for (int j = 0; j < perceptrons.size(); j++) {
+                int numWeights = perceptrons.get(j).weights.length;
+                for (int i = 0; i < numWeights; i++) {
+                    Eji.get(j)[i] += Ek_wji.get(j)[i];
+
+                }
+            }
         }
     }
     
-    void backpropagation() {
-        
+    float[] backpropagation() {
+        return new float[1];
     }
 }

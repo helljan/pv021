@@ -41,6 +41,10 @@ public class Perceptron {
         return (float) (1 / (1 + Math.exp(- lambda * sum)));
     }
     
+    float derivActivLogSig() {
+        return lambda * y * (1 - y);
+    }
+    
     void train(int desired) {
         float guess = feedForward();
         float error = desired - guess;
