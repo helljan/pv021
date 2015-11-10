@@ -45,10 +45,10 @@ public class MultilayerPerceptron {
     }
     
     void train(List<float[]> inputs, List<float[]> outputs) {
-        float epsilon = 0.5f;
+        float epsilon = 0.1f;
         List<Perceptron> perceptrons = getAllPerceptrons(false);
         
-        for (int t = 0; t < 10000; t++) {
+        for (int t = 0; t < 1000; t++) {
             List<float[]> E_wji = gradient(inputs, outputs);
             for (int j = 0; j < perceptrons.size(); j++) {
                 int numWeights = perceptrons.get(j).weights.length;
@@ -114,7 +114,6 @@ public class MultilayerPerceptron {
                 int numWeights = perceptrons.get(j).weights.length;
                 for (int i = 0; i < numWeights; i++) {
                     Eji.get(j)[i] += Ek_wji.get(j)[i];
-
                 }
             }
         }
@@ -136,10 +135,13 @@ public class MultilayerPerceptron {
             } else {
                 float sum = 0;
                 for (int r = 0; r < perceptrons.get(j).outputs.size(); r++) {
-                    sum += perceptrons.get(j).outputs.get(r).Ek_yr *
-                            perceptrons.get(j).outputs.get(r).derivActivLogSig() *
-                            perceptrons.get(j).outputs.get(r).weights[perceptrons.get(j).positionInLayer];
+                    Perceptron perceptron_r = perceptrons.get(j).outputs.get(r);
+                    sum += perceptron_r.Ek_yr *
+                            perceptron_r.derivActivLogSig() *
+                            perceptron_r.weights[perceptrons.get(j).positionInLayer];
                 }
+                Ek_yj[j] = sum;
+                perceptrons.get(j).Ek_yr = Ek_yj[j];
             }
         }
         

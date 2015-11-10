@@ -10,13 +10,15 @@ public class Perceptron {
     final float lambda = 1;
     List<Perceptron> inputs;
     List<Perceptron> outputs;
-    float Ek_yr;
+    float Ek_yr = 0;
     int layer;
     int positionInLayer;
     
     Perceptron(List<Perceptron> inputs, int layer, int positionInLayer) {
         this.layer = layer;
         this.positionInLayer = positionInLayer;
+        this.inputs = null;
+        this.outputs = null;
         
         if (inputs == null) {
             // this is input layer perceptron
