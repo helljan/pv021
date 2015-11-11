@@ -24,7 +24,7 @@ public class Perceptron {
             // this is input layer perceptron
         } else {
             this.inputs = inputs;
-            weights = new float[inputs.size()];
+            weights = new float[inputs.size() + 1];
             Random rand = new Random();
             for (int i = 0; i < weights.length; i++) {
                 weights[i] = rand.nextFloat() * 2 - 1;
@@ -34,9 +34,10 @@ public class Perceptron {
     
     float feedForward() {
         float sum = 0;
-        for (int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < weights.length - 1; i++) {
             sum += inputs.get(i).y * weights[i];
         }
+        sum += weights[weights.length - 1];
         y = activateLogSig(sum);
         return y;
     }

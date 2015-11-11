@@ -45,10 +45,10 @@ public class MultilayerPerceptron {
     }
     
     void train(List<float[]> inputs, List<float[]> outputs) {
-        float epsilon = 0.1f;
+        float epsilon = 0.001f;
         List<Perceptron> perceptrons = getAllPerceptrons(false);
         
-        for (int t = 0; t < 1000; t++) {
+        for (int t = 0; t < 5000; t++) {
             List<float[]> E_wji = gradient(inputs, outputs);
             for (int j = 0; j < perceptrons.size(); j++) {
                 int numWeights = perceptrons.get(j).weights.length;
@@ -104,8 +104,7 @@ public class MultilayerPerceptron {
                 for (int i = 0; i < numWeights; i++) {
                     Ek_wji.get(j)[i] = Ek_yj[j] *
                             perceptrons.get(j).derivActivLogSig() *
-                            perceptrons.get(j).inputs.get(i).y;
-                            
+                            ((i == (numWeights - 1)) ? 1 : perceptrons.get(j).inputs.get(i).y);
                 }
             }
             
@@ -122,7 +121,7 @@ public class MultilayerPerceptron {
     }
     
     private float[] backpropagation(float[] outputs) {
-        List<Perceptron> perceptrons = getAllPerceptrons(true);
+        List<Perceptron> perceptrons = getAllPerceptrons(false);
         float[] Ek_yj = new float[perceptrons.size()];
         int numPerceptronsWithoutOutputLayer =
                 perceptrons.size() - network.get(network.size() - 1).size();

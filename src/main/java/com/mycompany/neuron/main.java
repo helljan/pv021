@@ -43,7 +43,7 @@ public class main {
         
         ptron.train(inputs, outputs);
         
-        for (int i = inputs.size() - 10; i < inputs.size(); i++) {
+        for (int i = inputs.size() - 100; i < inputs.size(); i++) {
             ptron.feedForward(inputs.get(i));
             float[] answer = ptron.getOutputs();
             System.out.println("" + answer[0] + " " + outputs.get(i)[0]);
